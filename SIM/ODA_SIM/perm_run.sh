@@ -1,0 +1,42 @@
+#/bin/sh
+if [ $# -ne 3 ]; then
+        echo "### [ ERROR ] ################################################"
+        echo " Usage : ./perm_run.sh DIR            FILE_CNT   AGING_TIME"
+        echo "      Ex)./perm_run.sh 100000_1000tps 10         3"
+        echo "##############################################################"
+        exit
+fi
+
+DIR="./ODA_DATA/"$1
+FILE_CNT=$2
+AGING_TIME=$3
+
+START_TIME=`date '+%Y%m%d%H%M%S'`
+ 
+echo ""
+echo "## ODA SIMULATOR START ] ####################"
+
+#while [ true ]
+#do
+NOW_TIME=`date +%Y%m%d%H%M%S -d -${AGING_TIME}hours`
+#if [ $NOW_TIME -gt $START_TIME ]
+#then
+#        END_TIME=`date '+%Y%m%d%H%M%S'`
+#        echo "########################################################"         
+#        echo " Working Complete for Aging Hour [$AGING_TIME hours]" 
+#        echo " START : $START_TIME ~ END : $END_TIME"
+#        echo "########################################################"
+#        exit
+#fi
+ 
+#for ((i=1;i<=$FILE_CNT;i++));do
+#        ./ODA_SIM ODA01 $DIR/${i}_IN.dat lm.cfg
+#        ./ODA_SIM ODA01 $DIR/${i}_OUT.dat lm.cfg
+
+	./ODA_SIM_new ODA01 $DIR lm.cfg $AGING_TIME
+
+#done
+#done
+END_TIME=`date '+%C%y%m%d %H:%M:%S'`
+echo "## $START_TIME [S] ~ $END_TIME [E] ####################"
+echo ""

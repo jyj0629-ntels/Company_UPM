@@ -1,0 +1,1 @@
+{"address":[{"noti_port":10090,"group_id":"A","ip":"192.168.10.85","location":"S","api_port":10090, "api_proto":"http", "api_proto":"http","host_name":"PG01"}, {"noti_port":10090,"group_id":"B","ip":"192.168.10.86","location":"S","api_port":10090, "api_proto":"http", "api_proto":"http","host_name":"PG03"}],"api_key":"pgnotis!@#$","result_code":200}

@@ -1,0 +1,183 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.text.SimpleDateFormat;
+
+public class PermAPISimulator {
+        private static String _path = "127.0.0.1";
+
+        private static long _timelog = 0L;
+        private static long _cnt = 0L;
+        private static int _tps = 2000;
+        private static ExecutorService EXECUTOR_SERVICE = null;
+
+        public static void main(String[] arg){ 
+                if(arg.length == 0){ 
+                        System.out.println("############################################################################"); 
+                        System.out.println("Error) Please Input Parameter 'Server IP', 'mdn range', 'tps', 'aging hour'"); 
+                        System.out.println("############################################################################"); 
+                        System.exit(0); 
+                }
+                _path = arg[0]; 
+                String mdnCnt = arg[1]; 
+                String threadCnt = arg[2]; 
+                String tpsStr = arg[3];
+                String tid = "";
+
+                // HELP : For making TID by TODAY(YYMMDD) - Added by Mr.Music 2019.04.01
+                Date time = new Date(); 
+                SimpleDateFormat tempDate = new SimpleDateFormat("yyyyMMdd");
+
+                String todayStr = tempDate.format(time);
+                // END
+
+                System.out.println("API SIMULATOR START ["+new Date().toString()+"]"); 
+                System.out.println("\tAPI SIMULATOR PARAMETER = "+mdnCnt+", "+threadCnt+", "+tpsStr); 
+
+                EXECUTOR_SERVICE = Executors.newFixedThreadPool(Integer.parseInt(threadCnt));
+
+                _tps = Integer.parseInt(tpsStr); 
+
+                try { 
+                        _timelog = getTime(); 
+                        int maxCnt = Integer.parseInt(mdnCnt); 
+                        for(int cnt = 0 ; cnt < maxCnt ; cnt++){ 
+                                while(true){ 
+                                        float duration = getTime()-_timelog; 
+                                        if(duration == 0 || _cnt == 0){ break; } 
+                                        int tps = (int) (_cnt/(duration/1000)); 
+
+                                        if(tps < _tps){ break; } 
+                                        Thread.sleep(100); 
+                                } 
+                                // HELP : checkStatus API 
+                                String urlStr = "http://"+_path+"/api/10/A/checkStatus?pg_proc_id=SS&pg_host=PG01&if_id=&push_id=&mdn=84523287ec91db320e01437f763f6a7c&rat_type=L";
+                                String mdn = "0101"+String.format("%07d",(cnt+1));
+
+                                RequestAPI checkStatus = new RequestAPI(urlStr, mdn); 
+                                EXECUTOR_SERVICE.execute(checkStatus); 
+                                _cnt++;
+
+                                // HELP : updataPushStatus API 
+                                tid = "UPM01_" + todayStr + String.format("%010d", (cnt+1)); 
+                                urlStr = "http://"+_path+"/api/10/A/updatePushStatus?if_id="+tid+"&result_code=S&pg_host=PG01&pg_proc_id=SS&push_type=AOM&proc_id=DS&push_id=&mdn="; 
+                                RequestAPI updateStatus = new RequestAPI(urlStr, mdn); 
+                                EXECUTOR_SERVICE.execute(updateStatus);
+                                _cnt++; 
+                                if(_cnt%600 == 0){ 
+                                        System.out.println("Information) Sucess : " + _cnt + " - Time : " +new Date().toString()); 
+                                }
+                        }
+                        EXECUTOR_SERVICE.shutdown();
+                        while (!EXECUTOR_SERVICE.isTerminated()) {
+                                Thread.sleep(1); 
+                        } 
+                        EXECUTOR_SERVICE = null; 
+                } catch (Exception e) {
+                        e.printStackTrace(); 
+                }
+
+                System.out.println("API SIMULATOR END ["+new Date().toString()+"] Running Time : "+(getTime()-_timelog)+"ms, Total API Call Counnt : "+_cnt);
+        }
+
+        private static long getTime(){
+                return new Date().getTime();
+        }
+}
+
+class RequestAPI implements Runnable{ 
+        private static String _key = "ZoneService12345"; 
+
+        private String _mdn; 
+        private String _apiUrl;
+
+        public RequestAPI(String apiUrl, String mdn){ 
+                //System.out.println("[TEST]URL:" + apiUrl+ " / MDN:" + mdn); 
+                _apiUrl = apiUrl; 
+                _mdn = mdn; 
+        }
+
+        @Override
+                public void run() {
+                        try{
+                                send(_apiUrl+encrypt(_mdn));
+                        }catch(Exception e){
+                                System.out.println("REQUEST ERROR");
+                                e.printStackTrace();
+                        }
+                }
+
+        public String send(String apiUrl) throws Exception {
+                String resultCode = ""; 
+                HttpURLConnection conn = null; 
+                StringBuffer stringBufferResult = new StringBuffer();
+
+                try {
+                        URL url = new URL(apiUrl);
+                        conn = (HttpURLConnection) url.openConnection();
+
+                        conn.setConnectTimeout(3000);
+                        conn.setReadTimeout(3000);
+                        conn.setDoOutput(true);
+                        conn.setDoInput(true);
+                        conn.setUseCaches(false);
+                        conn.setDefaultUseCaches(false);
+
+                        int nResponseCode = conn.getResponseCode();
+                        resultCode = ""+nResponseCode;
+                        if (nResponseCode == HttpURLConnection.HTTP_OK) {
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                                String readLine = null;
+                                while ((readLine = reader.readLine()) != null) {
+                                        stringBufferResult.append(readLine);
+                                }
+                                reader.close();
+                                reader = null;
+                        }
+                        else {
+                                return ""+nResponseCode;
+                        }
+
+                } catch (Exception e) {
+                        throw e;
+                } finally {
+                        if(!"200".equals(resultCode)){
+                                System.out.println("<ERROR> " + new Date().toString()+" "+String.format("%-90s", apiUrl)+" >> "+resultCode);
+                        }
+                        if(conn != null) {
+                                conn.disconnect();
+                                conn = null;
+                        }
+                }
+                return stringBufferResult.toString();
+        }
+
+        public String byteArrayToHex(byte[] ba) {
+                if (ba == null || ba.length == 0) {
+                        return null;
+                }
+                StringBuffer sb = new StringBuffer(ba.length * 2);
+                String hexNumber;
+                for (int x = 0; x < ba.length; x++) {
+                        hexNumber = "0" + Integer.toHexString(0xff & ba[x]);
+
+                        sb.append(hexNumber.substring(hexNumber.length() - 2));
+                }
+                return sb.toString();
+        }
+
+        public String encrypt(String message) throws Exception {
+                SecretKeySpec skeySpec = new SecretKeySpec(_key.getBytes(), "AES");
+                Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5PADDING");
+                cipher.init(Cipher.ENCRYPT_MODE, skeySpec);
+                byte[] encrypted = cipher.doFinal(message.getBytes());
+                return byteArrayToHex(encrypted);
+        }
+}

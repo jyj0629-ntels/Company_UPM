@@ -1,0 +1,236 @@
+#/bin/sh
+esql="$MYSQL_HOME/bin/mysql -uzone_ems -pskt?321? upm_ems_revision -h 50.10.23.170"
+
+function tdata_stat_func { 
+START_DATE=$1
+END_DATE=$2
+
+echo "----------------------------------------------------------------------------------------------------"
+echo " [ TDATA STATISTICS ] "
+echo "####################################################################################################"
+echo "## 1) NRF API Request Statistics (EMS DB)"
+$esql << EOF
+SELECT SUM(NRF_REG_COUNT) , SUM(NRF_STOP_COUNT) FROM T_EMS_PM_PG_NRF_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE';
+EOF
+
+echo "####################################################################################################"
+echo "## 2-1) Zone Noti. Input/Out Statistics (List) - Traffic Count (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, MSG_TYPE, TOT_RECV_COUNT, SUCC_RECV_COUNT, FAIL_RECV_COUNT, REG_DATETIME 
+FROM T_EMS_PM_PG_NOTI_STATISTICS 
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+ORDER BY SYSTEM_ID ASC, REG_DATETIME ASC;
+EOF
+
+echo "####################################################################################################"
+echo "## 2-2) Zone Noti. Input/Out Statistics (Total) - Traffic Count (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, SUM(TOT_RECV_COUNT), SUM(SUCC_RECV_COUNT), SUM(FAIL_RECV_COUNT)
+FROM T_EMS_PM_PG_NOTI_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY SYSTEM_ID;
+EOF
+
+echo "####################################################################################################"
+echo "## 3) PG Input Statistics - MSG_TYPE (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, MSG_TYPE, SUM(TOT_RECV_COUNT) , SUM(SUCC_RECV_COUNT) , SUM(FAIL_RECV_COUNT)
+FROM T_EMS_PM_PG_NOTI_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY SYSTEM_ID, MSG_TYPE;
+EOF
+
+echo "###################################################################################################"
+echo "## 4) Push Result Statistics (EMS DB)"
+$esql << EOF
+SELECT result_code, SUM(result_count) FROM T_EMS_PM_PUSH_RESULT_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+
+echo "###################################################################################################"
+echo "## 5) API Request Detection - APP API Statistics "
+$esql << EOF
+SELECT REG_DATETIME, REQ_URL, SUM(result_count) FROM T_EMS_PM_APP_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY STATISTICS_ID, REQ_URL;
+EOF
+
+echo "###################################################################################################"
+echo "## 6) API Request Detection - APP API Statistics "
+$esql << EOF
+SELECT result_code , SUM(result_count) FROM T_EMS_PM_APP_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+
+echo "###################################################################################################"
+echo "## 7) API Request Detection - PG API REQUEST Statistics "
+$esql << EOF
+SELECT result_code , SUM(result_count) FROM T_EMS_PM_PG_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+}
+
+function mdms_stat_func {
+START_DATE=$1
+END_DATE=$2
+
+echo "----------------------------------------------------------------------------------------------------"
+echo " [ MDMS STATISTICS ] "
+echo "###################################################################################################"
+echo "## 1-1) Push Noti. Input/Out Statistics (List) - Traffic Count (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, MSG_TYPE, TOT_RECV_COUNT, SUCC_RECV_COUNT, FAIL_RECV_COUNT, REG_DATETIME
+FROM T_EMS_MDMS_STMP_NOTI_STATISTICS
+WHERE reg_datetime BETWEEN "$START_DATE" AND "$END_DATE"
+ORDER BY SYSTEM_ID ASC, REG_DATETIME ASC;
+EOF
+
+echo "###################################################################################################"
+echo "## 1-2) Zone Noti. Input/Out Statistics (Total) - Traffic Count (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, SUM(TOT_RECV_COUNT), SUM(SUCC_RECV_COUNT), SUM(FAIL_RECV_COUNT)
+FROM T_EMS_MDMS_STMP_NOTI_STATISTICS
+WHERE reg_datetime BETWEEN "$START_DATE" AND "$END_DATE"
+GROUP BY SYSTEM_ID;
+EOF
+
+echo "###################################################################################################"
+echo "## 2) STMP Input Statistics (EMS DB)"
+$esql << EOF
+SELECT SYSTEM_ID, MSG_TYPE, SUM(TOT_RECV_COUNT) , SUM(SUCC_RECV_COUNT) , SUM(FAIL_RECV_COUNT)
+FROM T_EMS_MDMS_STMP_NOTI_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY SYSTEM_ID, MSG_TYPE;
+EOF
+
+echo "###################################################################################################"
+echo "## 3) Push Result Statistics (EMS DB)"
+$esql << EOF
+SELECT result_code, SUM(result_count)
+FROM T_EMS_MDMS_PUSH_RESULT_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+
+echo "###################################################################################################"
+echo "## 4) MSMS API Request Detection - APP API Statistics "
+$esql << EOF
+SELECT REG_DATETIME, REQ_URL, SUM(result_count)
+FROM T_EMS_MDMS_APP_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY STATISTICS_ID, REQ_URL;
+EOF
+
+echo "###################################################################################################"
+echo "## 5) MSMS API Request Detection - APP API Statistics "
+$esql << EOF
+SELECT result_code , SUM(result_count)
+FROM T_EMS_MDMS_APP_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+
+echo "###################################################################################################"
+echo "## 6) MDMS API Request Detection - STMP API REQUEST Statistics "
+$esql << EOF
+SELECT result_code , SUM(result_count)
+FROM T_EMS_MDMS_STMP_API_STATISTICS
+WHERE reg_datetime BETWEEN '$START_DATE' AND '$END_DATE'
+GROUP BY result_code;
+EOF
+}
+
+function hfc_stat_func {
+START_DATE=$1
+END_DATE=$2
+
+echo "----------------------------------------------------------------------------------------------------"
+echo " [ HFC STATISTICS ] "
+echo "###################################################################################################"
+echo "## 1) HFC REQ/REQ Statistics "
+$esql << EOF
+select
+Ifnull(Sum(CASE WHEN msg_type='9' AND code_type='02' THEN result_code_cnt END),0) AS 'REQ',
+Ifnull(Sum(CASE WHEN msg_type='10' AND code_type='02' THEN result_code_cnt END),0) AS 'RES',
+Ifnull(Sum(CASE WHEN msg_type='10' AND code_type='02' AND result_code ='SC0000' THEN result_code_cnt END),0) AS 'SUCCESS Count',
+Ifnull(Sum(CASE WHEN msg_type='10' AND code_type='02' AND result_code !='SC0000' THEN result_code_cnt END),0) AS 'FAIL Count'
+FROM T_EMS_BAROD_PG_STATISTICS
+WHERE statistics_id BETWEEN "$START_DATE" AND "$END_DATE" AND msg_type in ('9','10');
+EOF
+
+echo "###################################################################################################"
+# result code별 통계 쿼리
+echo "## 2) HFC Result Code Statistics "
+$esql << EOF
+SELECT if(result_code is null, 'total count', result_code), SUM(result_code_cnt)
+FROM T_EMS_BAROD_PG_STATISTICS
+WHERE statistics_id BETWEEN "$START_DATE" AND "$END_DATE" AND msg_type in ('9','10')
+GROUP BY result_code;
+EOF
+}
+
+if [ $# != 3 ]; then
+        echo "----------------------------------------------------------------------------------------"
+        echo "[ERROR] You must input more value!!! "
+        echo "   Ex) result_report.sh START_DATE     END_DATE	    SERVICE(1:TDATA/2:MDMS/3:HFC/4:ALL)"
+        echo "       result_report.sh 20180311033000 20180312010000 1"
+        echo "----------------------------------------------------------------------------------------"
+        exit;
+elif [ $3 -ge 5 ] || [ $3 -le 0 ]; then
+        echo "----------------------------------------------------------------------------------------"
+        echo "[ERROR] You must input more value!!! "
+	echo " SERVICE Have to be '1:TDATA or 2:MDMS or 3:HFC'"
+        echo "----------------------------------------------------------------------------------------"
+        exit;
+fi
+
+# DATE Input Format Remake
+START_DATE=$1 
+END_DATE=$2
+SERVICE=$3
+
+if [ ${#START_DATE} != 14 ]; then
+        echo "----------------------------------------------------------------------"
+        echo "[ERROR] START_DATE Parameter must be 14 length!!! "
+        echo "----------------------------------------------------------------------"
+        exit;
+fi
+
+if [ ${#END_DATE} != 14 ]; then
+        echo "----------------------------------------------------------------------"
+        echo "[ERROR] END_DATE Parameter must be 14 length!!! "
+        echo "----------------------------------------------------------------------"
+        exit;
+fi
+
+START_DATE=${START_DATE:0:4}"-"${START_DATE:4:2}"-"${START_DATE:6:2}" "${START_DATE:8:2}":"${START_DATE:10:2}":"${START_DATE:12:2}
+END_DATE=${END_DATE:0:4}"-"${END_DATE:4:2}"-"${END_DATE:6:2}" "${END_DATE:8:2}":"${END_DATE:10:2}":"${END_DATE:12:2}
+
+echo "***************************************************************************************************"
+echo "** [ INFO ] ***************************************************************************************"
+echo " START_DATE  : $START_DATE"
+echo " END_DATE    : $END_DATE"
+echo "***************************************************************************************************"
+echo "***************************************************************************************************"
+
+if [ $SERVICE -eq 1 ]; then
+	tdata_stat_func "$START_DATE" "$END_DATE"
+elif [ $SERVICE -eq 2 ]; then
+	mdms_stat_func "$START_DATE" "$END_DATE"
+elif [ $SERVICE -eq 3 ]; then
+	hfc_stat_func "$START_DATE" "$END_DATE"
+elif [ $SERVICE -eq 4 ]; then
+	tdata_stat_func "$START_DATE" "$END_DATE"
+	mdms_stat_func "$START_DATE" "$END_DATE"
+	hfc_stat_func "$START_DATE" "$END_DATE"
+fi
+
+echo "---------------------------------------------------------------------------------------------------"
+echo ""
+echo "***************************************************************************************************"
+echo "************************************ [ Process Complete ] *****************************************"
+echo "***************************************************************************************************"

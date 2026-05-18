@@ -1,0 +1,1 @@
+{"stmp_host":"STMP02","result_code":"101","mdn":"01073307859","branch_name":"DS","update_dt":"20210420143232","rat_type":"S"}

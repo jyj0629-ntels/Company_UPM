@@ -1,0 +1,1 @@
+{"sys-id" : " ","code" : "200","ping-interval" : "10"}

@@ -1,0 +1,55 @@
+###############################################################################
+#
+# Paths for include files, libraries and alias
+#
+###############################################################################
+ALTI_INC=-I$(ALTIBASE_HOME)/include
+ALTI_LIB=-L$(ALTIBASE_HOME)/lib -lsesc -lodbccli -ldl -lpthread -lcrypt -lrt
+MYSQL_INC=-I$(MYSQL_HOME)/include
+MYSQL_LIB=-L$(MYSQL_HOME)/lib -lmysqlclient_r -lz
+
+SESC = sesc
+CP = cp
+MV = mv
+CC = g++
+AR = ar
+AR_FLAG = -r
+AR2 = ranlib
+DEFINES = -D_REENTRANT -D__LINUX -D__LITTLE_ENDIAN -D__PFNM_RELEASE $(APP_DEF)
+
+CM_INC= $(UM_HOME)/SRC/CM
+RBUS_INC= $(RBUS_HOME)/API/include
+RBUS_LIB_PATH = $(RBUS_HOME)/API/lib
+RBUS_LIB=$(RBUS_LIB_PATH)/libRBusAPI.a
+RD_INC= $(RD_HOME)/include
+RD_LIB_PATH = $(RD_HOME)/bin
+RD_LIB=$(RD_LIB_PATH)/libRDLib64.a
+PFM_INC=$(PFM_HOME)/API/INC
+PFM_LIB_PATH = $(PFM_HOME)/API/LIB/a
+PFM_LIB=$(PFM_LIB_PATH)/libpfmLocal64.a
+
+###############################################################################
+#
+# Compile option flags(=CFLAGS) 
+# Link library flags  (=LFLAGS)
+# Include Pathe Flage (=IFLAGS)
+#
+###############################################################################
+IFLAGS = -I$(CM_INC) -I$(RD_INC) -I$(PFM_INC) -I$(RBUS_INC) $(MYSQL_INC)
+CFLAGS = -m64 -Wall -Wno-write-strings -ggdb -O0 -g $(DEFINES) $(IFLAGS)
+LFLAGS = $(STDLIBS) $(RBUS_LIB) $(PFM_LIB) $(RD_LIB) $(MYSQL_LIB) -lpthread -ldl
+###############################################################################
+# 
+# Suffix rules(convert: .pc -> .cpp -> .o)
+# 
+###############################################################################
+
+.SUFFIXES:.sc .pc .cpp .C .o 
+
+.sc.o :
+	$(SESC) -t cpp $*.sc
+	$(CC) -c -o $*.o $(CFLAGS) $*.cpp
+
+.cpp.o:
+	$(CC) -c -o $*.o $(CFLAGS) $*.cpp 
+

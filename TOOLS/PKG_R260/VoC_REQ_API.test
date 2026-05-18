@@ -1,0 +1,40 @@
+#!/bin/bash
+URL="http://localhost/ems/cell/regi"
+
+START=1     # 시작 번호
+END=100     # 끝 번호
+STEP=5      # 한 번에 묶을 개수
+
+for ((i=START; i<=END; i+=STEP)); do
+    MDN_LIST=""
+    for ((j=i; j<i+STEP && j<=END; j++)); do
+        MDN=$(printf "010101%05d" $j)
+        if [ -z "$MDN_LIST" ]; then
+            MDN_LIST="$MDN"
+        else
+            MDN_LIST="$MDN_LIST,$MDN"
+        fi
+    done
+
+    DATA=$(cat <<EOF
+[
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100003:0","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100003:1","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100010:0","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100010:1","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:0","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:1","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:2","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:3","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:4","ta_code":"2514"},
+  {"mdn":"$MDN_LIST","cell_info":"eNB_100016:5","ta_code":"2514"}
+]
+EOF
+)
+
+    echo ">>> Sending request with MDN_LIST=$MDN_LIST"
+    curl -k -X POST "$URL" \
+      -H "Content-Type: application/json" \
+      -d "$DATA"
+    echo -e "\n-----------------------------------\n"
+done

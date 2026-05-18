@@ -1,0 +1,1 @@
+{"stmp_host":"STMP02","mdn":"01073307859","result_code":"000","noti_info_avp":"1000000000","rat_type":"S"}

@@ -1,0 +1,3 @@
+{"msg_type":"65","msg_len":"315","noti_type":"1","retrans_count":"0","group_id":"","sys_id":"STMP01","branch_name":"SS","tid": "STMP01_202104070000000000","ptid":"Spcf012021070415:53:5600","stid":"LTEPCRF01A_ZN01_201710109999999999","event_timestamp":"","mdn":"01012345678","client_host":"ltepgw01.sktelecom.net","mobile_ip":"10.10.10.10","cell_info":"45005-9999:99","rat_type":"L","noti_info":"1000000000","apn":"lte.sktelecom.com","service_id":"ZN100001","device_type":"A"}
+
+

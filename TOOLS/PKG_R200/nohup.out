@@ -1,0 +1,65 @@
+
+###################################################################
+ jstat -gc / jstat -gcccapacity running
+ You can find log file in 'RESULT' directry
+ Ex) TIMESTAMS_GC.log file / TIMESTAMS_GCAP.log file
+ If you want termination this script, you push 'Ctrl+Z'
+###################################################################
+
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 145 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 384 - FD : 145 / Now FD : 140 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 140 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 139 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 142 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 139 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 139 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 142 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 141 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 385 - FD : 145 / Now FD : 138 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 7
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 0 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 5 / MYSQL_FD_CONN : 7 : 0
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 395 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 0
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 395 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 0
+/APPDATA/PM/SIM/PERM/TOOLS/PKG_R141/resourceView.sh: line 115: 47060 Killed                  sleep $SLEEP_TIME
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 395 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 0
+/APPDATA/PM/SIM/PERM/TOOLS/PKG_R141/resourceView.sh: line 115: 51010 Killed                  sleep $SLEEP_TIME
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 395 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 0
+/APPDATA/PM/SIM/PERM/TOOLS/PKG_R141/resourceView.sh: line 115: 51978 Killed                  sleep $SLEEP_TIME
+ls: cannot access /proc/2682/fd: No such file or directory
+2682 not found
+2682 not found
+Information) Gathering Start Tomcat Thread : 385 / Now Tomcat Thread : 395 - FD : 145 / Now FD : 0 / MYSQL_CONNECTION : 15 : 15 / MYSQL_FD_CONN : 7 : 0

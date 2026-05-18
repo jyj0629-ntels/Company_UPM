@@ -1,0 +1,1 @@
+{"code-type" : "04","sys-id" : " ","branch-name" : "DS","tid" : " ","event-timestamp" : " ","mdn" : " ","new-mdn" : " ","addr" : "서울시 test addr", "device-type":"N","product-type":"01"}
